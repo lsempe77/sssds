@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Spatial Analysis Severe Stigmatising Skin NTDs in Liberia" />
+<meta property="og:type" content="book" />
+
+
+
+
+<meta name="author" content="Lucas Sempé" />
+
+
+
+<meta name="description" content="Spatial Analysis Severe Stigmatising Skin NTDs in Liberia">
+
+<title>Spatial Analysis Severe Stigmatising Skin NTDs in Liberia</title>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+
+
+
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+/* show arrow before summary tag as in bootstrap
+TODO: remove if boostrap in updated in html_document (rmarkdown#1485) */
+details > summary {
+  display: list-item;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container-fluid main-container">
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li class="has-sub"><a href="0.1-analysis-of-cases-2019---2021.html#analysis-of-cases-2019---2021"><span class="toc-section-number">0.1</span> Analysis of cases 2019 - 2021</a>
+<ul>
+<li><a href="0.1-analysis-of-cases-2019---2021.html#raw-cases"><span class="toc-section-number">0.1.1</span> Raw cases</a></li>
+<li><a href="0.1-analysis-of-cases-2019---2021.html#analysis-and-comparison-with-other-countries"><span class="toc-section-number">0.1.2</span> Analysis and comparison with other countries</a></li>
+</ul></li>
+<li><a href="0.2-integrated-case-management.html#integrated-case-management"><span class="toc-section-number">0.2</span> Integrated case management</a></li>
+<li><a href="0.3-inferential-analysis-spatial-autocorrelation-and-spatial-regressions.html#inferential-analysis-spatial-autocorrelation-and-spatial-regressions"><span class="toc-section-number">0.3</span> Inferential analysis: spatial autocorrelation and spatial regressions</a></li>
+<li><a href="0.4-references.html#references"><span class="toc-section-number">0.4</span> References</a></li>
+<li class="has-sub"><a href="0.5-appendix.html#appendix"><span class="toc-section-number">0.5</span> Appendix</a>
+<ul>
+<li><a href="0.5-appendix.html#bu"><span class="toc-section-number">0.5.1</span> BU</a></li>
+<li><a href="0.5-appendix.html#lf"><span class="toc-section-number">0.5.2</span> LF</a></li>
+<li><a href="0.5-appendix.html#population"><span class="toc-section-number">0.5.3</span> Population</a></li>
+<li><a href="0.5-appendix.html#district-population-and-health-facilities"><span class="toc-section-number">0.5.4</span> District population and health facilities</a></li>
+<li><a href="0.5-appendix.html#district-population-density"><span class="toc-section-number">0.5.5</span> District population density</a></li>
+<li><a href="0.5-appendix.html#land-distribution"><span class="toc-section-number">0.5.6</span> Land distribution</a></li>
+<li><a href="0.5-appendix.html#rivers"><span class="toc-section-number">0.5.7</span> Rivers</a></li>
+<li><a href="0.5-appendix.html#bioclimate-variables"><span class="toc-section-number">0.5.8</span> Bioclimate variables</a></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="header">
+<h1 class="title">Spatial Analysis Severe Stigmatising Skin NTDs in Liberia</h1>
+<h3 class="subtitle"><em>Years 2019-2021</em></h3>
+<h4 class="author"><em>Lucas Sempé</em></h4>
+</div>
+<div id="analysis-of-cases-2019---2021" class="section level2" number="0.1">
+<h2><span class="header-section-number">0.1</span> Analysis of cases 2019 - 2021</h2>
+<div id="raw-cases" class="section level3" number="0.1.1">
+<h3><span class="header-section-number">0.1.1</span> Raw cases</h3>
+<p>Liberia is one of the first countries in the world to develop a national integrated approach to managing SSSDs, namely, lymphatic filariasis (LF), leprosy, Buruli ulcer (BU), yaws, hydrocele (HC) and onchocerciasis. This means managing diseases with signs on the skin, through a combined approach at the local level.</p>
+<p>The Ministry of Health of Liberia has 1,113 cases of 5 SSSDs: BU, HC, Leprosy, LF and Yaws from 2019 to 2021. BU represents 44% of total cases (488), followed by HC (21% as in 239 cases), Leprosy (16% as in 179 cases), LF with 167 cases (15% of total) and 40 cases of yaws (4%). Table <a href="0.1-analysis-of-cases-2019---2021.html#tab:casyear">1</a>) shows disaggregated figures per year and disease, where we observe a decrease in the numbers of detected cases of BU (from 197 to 122), an increase in the cases of HC, LF and Yaws (up to 94, 112 and 40 in 2021), while leprosy has an oscillating behaviour over time.</p>
+<table>
+<caption><span id="tab:casyear">Table 1: </span>Number of cases per year - SSSDs</caption>
+<thead>
+<tr class="header">
+<th align="left">Year</th>
+<th align="right">BU</th>
+<th align="right">HC</th>
+<th align="right">Leprosy</th>
+<th align="right">LF</th>
+<th align="right">Yaws</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2019</td>
+<td align="right">197</td>
+<td align="right">55</td>
+<td align="right">52</td>
+<td align="right">32</td>
+<td align="right">0</td>
+<td align="right">336</td>
+</tr>
+<tr class="even">
+<td align="left">2020</td>
+<td align="right">169</td>
+<td align="right">90</td>
+<td align="right">82</td>
+<td align="right">23</td>
+<td align="right">12</td>
+<td align="right">376</td>
+</tr>
+<tr class="odd">
+<td align="left">2021</td>
+<td align="right">122</td>
+<td align="right">94</td>
+<td align="right">45</td>
+<td align="right">112</td>
+<td align="right">28</td>
+<td align="right">401</td>
+</tr>
+<tr class="even">
+<td align="left">Total</td>
+<td align="right">488</td>
+<td align="right">239</td>
+<td align="right">179</td>
+<td align="right">167</td>
+<td align="right">40</td>
+<td align="right">1113</td>
+</tr>
+</tbody>
+</table>
+<p>Figure <a href="0.1-analysis-of-cases-2019---2021.html#fig:cases-year">1</a> portrays the number of detected cases across years 2019 to 2021 for the 5 diseases. It is possible to observe geographical patterns for BU (with the majority of cases found in the North and East of the country) and Leprosy (with cases found in the middle and center-south of the country). For the other diseases,</p>
+<div class="figure"><span style="display:block;" id="fig:cases-year"></span>
+<img src="index_files/figure-html/cases-year-1.png" alt="Cases per disease and year over time" width="576" />
+<p class="caption">
+Figure 1: Cases per disease and year over time
+</p>
+</div>
+<p>Over the period, any of the 5 aforementioned diseases were detected in 46 districts out of the 136 districts (34% of the total number of districts in the country), where only in 5 districts all diseases were found, while 8 districts have detected cases of 4 diseases, 11 districts detected cases of 3 diseases, 10 districts detected cases of 2 diseases and 12 districts detected only 1 disease (see Figure <a href="0.1-analysis-of-cases-2019---2021.html#fig:prop1">2</a>).</p>
+<p><strong>Karsor/Laura: does it make sense to expect an increase on the identification of more diseases in the same district?</strong></p>
+<div class="figure"><span style="display:block;" id="fig:prop1"></span>
+<img src="index_files/figure-html/prop1-1.png" alt="Number of districts were one or more diseases were detected over the period 2019 to 2021" width="576" />
+<p class="caption">
+Figure 2: Number of districts were one or more diseases were detected over the period 2019 to 2021
+</p>
+</div>
+<p>Figure <a href="0.1-analysis-of-cases-2019---2021.html#fig:saniquele">3</a>) shows the proportion of the total cases per year and disease found in the district of Sanniquellie Mahn in Nimba, where a national reference center is based. BU cases oscillates between 34% and 43% of the total, while HC and Leprosy show an important increase in year 2021, reaching 43% and 58%, respectively. LF shows lower values, reaching 13% in 2020 and there were no identified cases of Yaws.</p>
+<p><strong>Karsor: why the increase in HC/Leprosy in 2021?</strong></p>
+<p><strong>Karsor/Laura: is it possible to know from how far people go there? (so we can estimate the endemic areas and not the point of treatment)</strong></p>
+<p><strong>Karsor: is correct to expect that this % goes down with IC across counties?</strong></p>
+<div class="figure"><span style="display:block;" id="fig:saniquele"></span>
+<img src="index_files/figure-html/saniquele-1.png" alt="Proportion of cases found in Sanniquellie Mahn by disease and year" width="576" />
+<p class="caption">
+Figure 3: Proportion of cases found in Sanniquellie Mahn by disease and year
+</p>
+</div>
+</div>
+<div id="analysis-and-comparison-with-other-countries" class="section level3" number="0.1.2">
+<h3><span class="header-section-number">0.1.2</span> Analysis and comparison with other countries</h3>
+<p>In the case of <strong><em>BU</em></strong>, we find national rates between 0.4 and 0.7 per 10,000 inhabitants across years. The highest rates are found in Trenbo, Grand Kru, in 2020 (36.8 cases per 10,000 inhabitants) followed by Sanniquellie Mahn in 2019 and 2020 (24.1 cases per 10,000 and 16.6 cases per 10,000). As a comparison, <span class="citation">Simpson et al. (2019)</span> reviewed different prevalence studies in West Africa finding rates between 3.2 to 26.9 cases per 10,000. See table in Appendix.</p>
+<p><strong>Karsor: Trenbo consistently has higher rates. Is there a plausible explanation?</strong></p>
+<p>In the case of <strong><em>LF</em></strong>, we find rates between 0.05 and 1.2 per 10,000 inhabitants across years. However, the rate in 2021 is 1,300 times higher than in 2020. This raise is produced by Trenbo and Barclayville in Grand Kru, with rates of 110 and 50.6 cases in 10,000 people.</p>
+<p><strong>Karsor: Trenbo and Barclayville suggest 1 in 100 and 1 in 200 have LF. Is that feasible?</strong></p>
+<p>As a comparison, a Bayesian geospatial estimation by the Local Burden of Disease 2019 Neglected Tropical Diseases Collaborators <span class="citation">(Cromwell et al. 2020)</span> suggests 11.1% of prevalence in Liberia, with districts in Nimba with an estimated prevalence over 30% where many areas in the country are unlikely to be below the 2% threshold of prevalence (posterior probability &lt;5% of not occurring). See appendix for estimations per district.</p>
+<p><strong>Karsor/Laura: Is this feasible?</strong></p>
+<p>In the case of <strong><em>Leprosy</em></strong>, we find stable rates between 0.08 and 0.16 per 10,000 inhabitants across years. Besides Sanniquellie Mahn (rates oscillate between 4.6 in 2019 and 8.31 in 2020), other districts with higher rates are Kokoyah, Bong (4.06 cases in 10,000) and Tchien, in Grand Gedeh (3.7 cases in 10,000).</p>
+<p>As a comparison, WHO compiled in 2016 prevalence and new cases for the world <span class="citation">(WHO 2016)</span>, where Africa shows a prevalence rate of .3 per 10,000 and 2 new cases per 100,000.</p>
+<p><strong>Karsor/Laura: Liberia has on average 50% less detected cases than other countries. Does it make sense?</strong></p>
+<p>In the case of <strong>HC</strong>, rates growth from .09 per 10,000 in 2019 to .7 per 10,000 in 2021, driven by cases found in Sanniquellie Mahn (40) and Trenbo (13). There was no available information in the literature to benchmark prevalence or newly detected cases.</p>
+<p><strong>Karsor/Laura: Any data or source?</strong></p>
+<p>Finally, in the case of <strong>Yaws</strong>, there were no cases registered in 2019, while in 2020 and 2021 rates grew from .09 per 10,000 in 2020 to .28 in 2021. The district of Trenbo, both in 2020 and 2021 show the highest ratios in the country, 5.3 and 36.8 per 10,000 respectively. In terms of raw cases, the district of Salala in Bong has the highest number (10 cases in 2021), followed by Pleebo/Sodoken in Maryland (5 cases in 2021) and Commonwealth in Grand Bassa (4 cases in 2021).</p>
+<p>As a comparison, a recent systematic review finds the prevalence of active yaws lesions ranged from in tropical forests in Central Africa, including 9% per in Cameroon, 11% in the Central African Republic, 4·77% in the Democratic Republic of the Congo, and 2·95% in the Republic of Congo <span class="citation">(Mitjà et al. 2015)</span>.</p>
+<p><strong>Karsor/Laura: Does this data make sense?</strong></p>
+</div>
+</div>
+<p style="text-align: center;">
+<a href="0.2-integrated-case-management.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+</body>
+</html>
