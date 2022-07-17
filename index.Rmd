@@ -2,11 +2,32 @@
 title: "Spatial Analysis Severe Stigmatising Skin NTDs in Liberia"
 subtitle: "Years 2019-2021"
 author: "Lucas Sempé"
-geometry: margin=2cm
 output:
-  bookdown::html_book:
-    highlight: tango
-    theme: united
+  bookdown::gitbook:
+    config:
+    toolbar:
+      position: fixed
+    edit : null
+    download: ["index.pdf", "PDF"]
+    search:
+      # options to control/tune search engine behavior (for
+      engine: lunr # or fuse
+      # fuse.js, refer to https://fusejs.io/api/options.html)
+      options: null
+    fontsettings:
+      theme: white
+      family: sans
+      size: 2
+    sharing:
+      facebook: true
+      github: true
+      twitter: true
+      linkedin: false
+      whatsapp: false
+      all: ['facebook', 'twitter', 'linkedin', 'github', 'whatsapp']
+    info: true
+  bookdown::pdf_book:
+    latex_engine: lualatex
 editor_options: 
   chunk_output_type: console
 bibliography: references.bib

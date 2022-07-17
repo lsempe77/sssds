@@ -1,0 +1,542 @@
+---
+title: "Spatial Analysis Severe Stigmatising Skin NTDs in Liberia"
+subtitle: "Years 2019-2021"
+author: "Lucas Sempé"
+output:
+  bookdown::gitbook:
+    config:
+    toolbar:
+      position: fixed
+    edit : null
+    download: null
+    search:
+      engine: lunr # or fuse
+      # options to control/tune search engine behavior (for
+      # fuse.js, refer to https://fusejs.io/api/options.html)
+      options: null
+    fontsettings:
+      theme: white
+      family: sans
+      size: 2
+    sharing:
+      facebook: true
+      github: true
+      twitter: true
+      linkedin: false
+      whatsapp: false
+      all: ['facebook', 'twitter', 'linkedin', 'github', 'whatsapp']
+    info: true
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+---
+
+```{r, include=F}
+
+library(sf)
+library(tidyverse)
+library(gghighlight)
+library(scales)
+library(ggspatial)
+library(raster)
+library(janitor)
+
+knitr::opts_chunk$set(echo = F,warning = F,message = F,
+  comment = '', fig.width = 6, fig.height = 6
+)
+
+map_final <- readRDS("data/map_final.rds")
+dftest <- readRDS("data/dftest.rds")
+map <- readRDS("data/map.rds")
+
+hf <- read_sf(dsn = "data/hf/healthsites.shp")
+
+hf <- hf %>% filter (amenity != "pharmacy") %>% filter (amenity != "dentist")
+
+care<-c("Bomi", "Bong", "Lofa", "Maryland", "Nimba")
+
+
+```
+
+## Analysis of cases 2019 - 2021
+
+### Raw cases
+
+Liberia is one of the first countries in the world to develop a national integrated approach to managing SSSDs, namely, lymphatic filariasis (LF), leprosy, Buruli ulcer (BU), yaws, hydrocele (HC) and onchocerciasis. This means managing diseases with signs on the skin, through a combined approach at the local level.
+
+The Ministry of Health of Liberia has 1,113 cases of 5 SSSDs: BU, HC, Leprosy, LF and Yaws from 2019 to 2021. BU represents 44% of total cases (488), followed by HC (21% as in 239 cases), Leprosy (16% as in 179 cases), LF with 167 cases (15% of total) and 40 cases of yaws (4%). Table \@ref(tab:casyear)) shows disaggregated figures per year and disease, where we observe a decrease in the numbers of detected cases of BU (from 197 to 122), an increase in the cases of HC, LF and Yaws (up to 94, 112 and 40 in 2021), while leprosy has an oscillating behaviour over time.
+
+```{r casyear}
+
+cases.y<- map_final %>% st_drop_geometry() %>%
+    group_by(year,disease) %>%
+  summarise(Total=sum(value))  %>% 
+  rename(Disease = disease,Year=year) %>% 
+  pivot_wider(names_from = Disease, values_from = Total)
+
+cases.y %>% 
+  adorn_totals(c("row", "col")) %>% 
+  knitr::kable(caption = "Number of cases per year - SSSDs")
+
+```
+
+Figure \@ref(fig:cases-year) portrays the number of detected cases across years 2019 to 2021 for the 5 diseases. It is possible to observe geographical patterns for BU (with the majority of cases found in the North and East of the country) and Leprosy (with cases found in the middle and center-south of the country). For the other diseases,
+
+```{r cases-year, fig.cap = 'Cases per disease and year over time'}
+
+
+map_final %>% group_by(disease) %>% 
+  mutate (Cases = ifelse(value==0,NA,value))%>%
+  ggplot() + 
+  geom_sf(aes(fill=Cases)) +  
+  theme_void() + facet_grid(year~disease) + 
+  scale_fill_viridis_c(option = "A", direction = -1,
+                       na.value="white") +
+  theme(legend.position = "bottom")
+
+```
+
+Over the period, any of the 5 aforementioned diseases were detected in 46 districts out of the 136 districts (34% of the total number of districts in the country), where only in 5 districts all diseases were found, while 8 districts have detected cases of 4 diseases, 11 districts detected cases of 3 diseases, 10 districts detected cases of 2 diseases and 12 districts detected only 1 disease (see Figure \@ref(fig:prop1)).
+
+**Karsor/Laura: does it make sense to expect an increase on the identification of more diseases in the same district?**
+
+```{r  prop1, fig.cap="Number of districts were one or more diseases were detected over the period 2019 to 2021"}
+
+dftest %>% st_drop_geometry() %>%
+    group_by(disease, County, District)  %>% 
+  filter (Cases>0) %>% mutate(cd=paste0(County,"_",District)) %>%
+  group_by(cd,disease) %>% tally () %>% dplyr::select(cd) %>%
+  count() %>% arrange (-n) %>% ggplot() + 
+  geom_bar(aes(n)) + scale_y_continuous(breaks = seq(0,12,1)) + 
+  theme_light() + xlab ("Number of diseases found in district over 2019-2021") + 
+  ylab ("Number of districts")
+  
+
+
+```
+
+Figure \@ref(fig:saniquele)) shows the proportion of the total cases per year and disease found in the district of Sanniquellie Mahn in Nimba, where a national reference center is based. BU cases oscillates between 34% and 43% of the total, while HC and Leprosy show an important increase in year 2021, reaching 43% and 58%, respectively. LF shows lower values, reaching 13% in 2020 and there were no identified cases of Yaws.
+
+**Karsor: why the increase in HC/Leprosy in 2021?**
+
+**Karsor/Laura: is it possible to know from how far people go there? (so we can estimate the endemic areas and not the point of treatment)**
+
+**Karsor: is correct to expect that this % goes down with IC across counties?**
+
+```{r saniquele, fig.cap="Proportion of cases found in Sanniquellie Mahn by disease and year"}
+
+
+sani<-map_final %>% 
+  st_drop_geometry() %>% 
+  filter(District=="Sanniquellie Mahn") %>% 
+  group_by(disease,year) %>%
+  summarise (cases=sum(value)) %>% rename(Sanniquellie = cases)
+
+non_sani<-map_final %>% 
+  st_drop_geometry() %>% 
+  filter(District!="Sanniquellie Mahn") %>% 
+  group_by(disease,year) %>%
+  summarise (cases=sum(value)) %>% rename(non_Sanniquellie = cases)
+
+sani %>% left_join(non_sani) %>% 
+  mutate (Total = Sanniquellie + non_Sanniquellie,
+          Prop_Sanniquellie = round(Sanniquellie/ Total,3)) %>%
+  mutate(Prop_Sanniquellie = ifelse(is.na(Prop_Sanniquellie),0,Prop_Sanniquellie)) %>%
+  ggplot() + 
+  geom_line(aes(as.factor(year),Prop_Sanniquellie,group=disease)) + 
+  facet_wrap(~disease) + theme_light() + 
+  scale_y_continuous(labels = scales::percent, breaks = seq(0,1,.1)) +
+  ylab("% cases found in Sanniquellie Mahn")
+
+
+```
+
+### Analysis and comparison with other countries
+
+In the case of ***BU***, we find national rates between 0.4 and 0.7 per 10,000 inhabitants across years. The highest rates are found in Trenbo, Grand Kru, in 2020 (36.8 cases per 10,000 inhabitants) followed by Sanniquellie Mahn in 2019 and 2020 (24.1 cases per 10,000 and 16.6 cases per 10,000). As a comparison, @simpson2019 reviewed different prevalence studies in West Africa finding rates between 3.2 to 26.9 cases per 10,000. See table in Appendix.
+
+**Karsor: Trenbo consistently has higher rates. Is there a plausible explanation?**
+
+In the case of ***LF***, we find rates between 0.05 and 1.2 per 10,000 inhabitants across years. However, the rate in 2021 is 1,300 times higher than in 2020. This raise is produced by Trenbo and Barclayville in Grand Kru, with rates of 110 and 50.6 cases in 10,000 people.
+
+**Karsor: Trenbo and Barclayville suggest 1 in 100 and 1 in 200 have LF. Is that feasible?**
+
+As a comparison, a Bayesian geospatial estimation by the Local Burden of Disease 2019 Neglected Tropical Diseases Collaborators [@cromwell2020] suggests 11.1% of prevalence in Liberia, with districts in Nimba with an estimated prevalence over 30% where many areas in the country are unlikely to be below the 2% threshold of prevalence (posterior probability \<5% of not occurring). See appendix for estimations per district.
+
+**Karsor/Laura: Is this feasible?**
+
+In the case of ***Leprosy***, we find stable rates between 0.08 and 0.16 per 10,000 inhabitants across years. Besides Sanniquellie Mahn (rates oscillate between 4.6 in 2019 and 8.31 in 2020), other districts with higher rates are Kokoyah, Bong (4.06 cases in 10,000) and Tchien, in Grand Gedeh (3.7 cases in 10,000).
+
+As a comparison, WHO compiled in 2016 prevalence and new cases for the world [@who_global_2016], where Africa shows a prevalence rate of .3 per 10,000 and 2 new cases per 100,000.
+
+**Karsor/Laura: Liberia has on average 50% less detected cases than other countries. Does it make sense?**
+
+In the case of **HC**, rates growth from .09 per 10,000 in 2019 to .7 per 10,000 in 2021, driven by cases found in Sanniquellie Mahn (40) and Trenbo (13). There was no available information in the literature to benchmark prevalence or newly detected cases.
+
+**Karsor/Laura: Any data or source?**
+
+Finally, in the case of **Yaws**, there were no cases registered in 2019, while in 2020 and 2021 rates grew from .09 per 10,000 in 2020 to .28 in 2021. The district of Trenbo, both in 2020 and 2021 show the highest ratios in the country, 5.3 and 36.8 per 10,000 respectively. In terms of raw cases, the district of Salala in Bong has the highest number (10 cases in 2021), followed by Pleebo/Sodoken in Maryland (5 cases in 2021) and Commonwealth in Grand Bassa (4 cases in 2021).
+
+As a comparison, a recent systematic review finds the prevalence of active yaws lesions ranged from in tropical forests in Central Africa, including 9% per in Cameroon, 11% in the Central African Republic, 4·77% in the Democratic Republic of the Congo, and 2·95% in the Republic of Congo [@mitjà2015].
+
+**Karsor/Laura: Does this data make sense?**
+
+```{r auxiliary, include=FALSE}
+
+# map_final %>% st_drop_geometry() %>%
+#   ungroup %>%
+#   rowwise() %>%
+#    mutate(ratio=value/population) %>%
+#   group_by(year,disease) %>%
+#   summarise(ratio=mean(ratio)*10000) %>%
+#   filter (disease=="Yaws") %>% arrange (-ratio)
+# 
+# map_final %>% st_drop_geometry() %>%
+#   ungroup %>%
+#   rowwise() %>%
+#    mutate(ratio=value/population) %>%
+#   group_by(year,disease,County,District) %>%
+#   summarise(ratio=mean(ratio)*10000) %>% filter(ratio>0) %>%
+#   filter (disease=="Yaws") %>% arrange (-ratio)
+# 
+# map_final %>% st_drop_geometry() %>%
+#   group_by(year,disease,County,District) %>%
+#   filter(value>0) %>%
+#   filter (disease=="Yaws") %>% arrange (-value) %>% filter (year=="2021") %>%
+#   dplyr::select(County, District, year, value)
+
+```
+
+## Integrated case management
+
+The integrated case management intervention has been deployed across 5 counties: Bomi, Bong, Lofa, Maryland and Nimba (see Figure \@ref(fig:ntd)).
+
+**Karsor: is this map correct?**
+
+```{r ntd, fig.cap = 'Counties with NTDs integrated case management'}
+
+ggplot(map) +
+    geom_sf(aes(fill = County)) +
+    gghighlight(County %in% care) + theme_void()+
+  annotation_scale()
+    
+
+```
+
+Figures \@ref(fig:cases-total-int) and \@ref(fig:cases-total-not) show the total number of cases
+
+```{r cases-total-int, fig.cap = 'Cases in IC districts - 2019-2021'}
+
+dftest %>% 
+    mutate (Cases = ifelse(Cases==0,NA,Cases))%>%
+  ggplot() + 
+  geom_sf(aes(fill=Cases)) +  facet_wrap(~disease) +
+  theme_void() +     gghighlight(County %in% care) +
+  scale_fill_viridis_c(option = "A", direction = -1,
+                       na.value="white") +
+  theme(legend.position = "bottom") 
+  
+
+```
+
+```{r cases-total-not, fig.cap = 'Cases in nIC districts - 2019-2021'}
+
+`%!in%` = Negate(`%in%`)
+
+dftest %>% 
+    mutate (Cases = ifelse(Cases==0,NA,Cases)) %>%
+  ggplot() + 
+  geom_sf(aes(fill=Cases)) +  facet_wrap(~disease) +
+  theme_void() + gghighlight(County %!in% care) +
+  scale_fill_viridis_c(option = "A", direction = -1,
+                       na.value="white") +
+  theme(legend.position = "bottom") 
+  
+
+```
+
+Figure \@ref(fig:cas)) shows the evolution of the number of detected cases across two groups of counties, those implementing an integrated case management (IC) and those without an integrated care (nIC). We observe two different behaviors across diseases. In the first one (top row), the number of detected cases of Buruli Ulcer (BU), hydrocele (HC) and Leprosy is significantly higher in counties with integrated case management. The case of BU shows a 50% decrease over time on IC counties from about 200 to 100. The case of LF is significantly different due to an intervention to actively detect cases in Barclayville (77 cases) and Trenbo (21 cases), both in Gran Kru county, in 2021.
+
+**Karsor/Laura: is this intervention in Gran Kru correct?**
+
+```{r cas, fig.cap = 'Cases 2019-2021 by Integrated case management'}
+
+
+map_final %>% st_drop_geometry() %>%
+    mutate(Integrated = ifelse(County %in% care, "Yes","No")) %>%
+    group_by(year,Integrated,disease) %>%
+  summarise(sum=sum(value)) %>% 
+  ggplot() + geom_line(aes(year,sum,colour=Integrated, group=Integrated))+ facet_wrap(~disease) + theme_light() + xlab("") + ylab("Cases")
+
+```
+
+Figure \@ref(fig:prop2) presents the number of districts with 1 or more detected diseases over the period. Over the period, any of the 5 aforementioned diseases were detected in 27 districts out of the 47 districts (57.4% of the total number of districts in the case management counties) and in 19 out of 80 districts without case management (21.3% of correspondent districts). Only in 5 districts with integrated case management all 5 diseases were found, while in 6 districts with IC have detected cases of 4 diseases (in comparison to 2 in nIC); 7 districts with IC detected cases of 3 diseases, while only 4 nIC districts did the same; 6 districts with IC detected cases of 2 diseases, while only 4 nIC districts did the same. Finally, the number of districts which detected only 1 disease is higher in nIC areas (9) compared to 3 districts with IC detecting only 1 disease.
+
+```{r prop2, fig.cap="Number of districts were one or more diseases were detected over the period 2019 to 2021 by Integrated Case management"}
+
+# dftest %>% st_drop_geometry() %>%
+#     mutate(Integrated = ifelse(County %in% care, "Yes","No")) %>%
+#   filter (Cases>0) %>% mutate(cd=paste0(County,"_",District)) %>%
+#   group_by(cd,disease,Integrated) %>% tally () %>% 
+#   group_by(Integrated) %>%
+#   distinct(cd) %>% 
+#   summarise(count=n()) # 19 districts NO / 27 districts yes
+# 
+# map_final %>% st_drop_geometry() %>%
+#     mutate(Integrated = ifelse(County %in% care, "Yes","No")) %>%
+#   mutate(cd=paste0(County,"_",District)) %>%
+#   group_by(Integrated) %>%   distinct(cd) %>% 
+#   tally() # 89 districts NO / 47 YES
+
+dftest %>% st_drop_geometry() %>%
+    mutate(Integrated = ifelse(County %in% care, "Yes","No")) %>%
+  filter (Cases>0) %>% mutate(cd=paste0(County,"_",District)) %>%
+  group_by(cd,disease,Integrated) %>% tally () %>% 
+  group_by(cd,disease,Integrated) %>% 
+  dplyr::select(c(cd,Integrated)) %>% 
+  group_by(cd,Integrated) %>%
+  count() %>% arrange (-n) %>% ggplot() + 
+  geom_bar(aes(n,fill=Integrated),
+           position = position_dodge2(width = 0.9, preserve = "single")) + 
+  scale_y_continuous(breaks = seq(0,12,1)) + 
+  theme_light() + xlab ("Number of diseases found in district over 2019-2021") + 
+  ylab ("Number of districts")
+  
+
+```
+
+Figure \@ref(fig:rat)) shows the evolution of the number of detected cases per 10,000 inhabitants across both groups of counties. The analytic scenario is different from the raw count presented in Figure \@ref(fig:cas). We only observe a consistent higher ratio of IC counties in the case of Leprosy, while in BU and Yaws values are similar across groups. In the case of HC and LF, we observe that nIC counties show higher ratios in 2021.
+
+```{r rat, fig.cap = 'Ratio 2019-2021 by Integrated case management'}
+
+map_final %>% st_drop_geometry() %>%
+    mutate(Integrated = ifelse(County %in% care, "Yes","No")) %>%
+  ungroup %>%
+  rowwise() %>%
+    mutate(ratio=value/population) %>%
+  group_by(year,disease,Integrated) %>%
+  summarise(ratio=mean(ratio)*10000) %>%
+  ggplot() + geom_line(aes(year,ratio,colour=Integrated, group=Integrated))+ facet_wrap(~disease) + theme_light() + scale_y_continuous(labels = scales::comma,                                                                breaks = seq(0,2,.2)                                                                      ) +
+  ylab("Cases per 10,000") + xlab("")
+
+```
+
+## Inferential analysis: spatial autocorrelation and spatial regressions
+
+```{r moran, fig.cap="Local Moran test"}
+
+dftest %>% 
+  mutate(pysal = ifelse(p_folded_sim <= 0.1, as.character(pysal), NA)) |> 
+  ggplot(aes(fill = pysal)) +
+  geom_sf() +
+  geom_sf(lwd = 0.2, color = "black") + facet_wrap (~disease) + 
+  theme_void() +
+  scale_fill_manual(values = c("#1C4769", "#24975E", "#EACA97", "#B20016"))
+
+#
+
+```
+
+```{r ehs, fig.cap="Emergent hotspots analysis"}
+
+ehs<-readRDS("data/ehs.rds")
+
+ehs %>% filter(str_detect(classification,"hot")) %>%
+  ggplot() + 
+  facet_wrap(~disease) +
+  geom_sf(aes(fill=classification),lwd = 0.2, color = "black") +
+  geom_sf(data=map, fill=NA) + 
+  theme_void() + scale_fill_viridis_d()
+
+```
+
+```{r residuals, fig.cap="Residuals OLS regression on number of cases"}
+
+resid <-  dftest %>% 
+  group_by(disease) %>% 
+  do(residuals = broom::tidy(residuals(lm(Cases ~   bio1_25 + bio2_25 +
+                                            bio3_25 +
+                                            bio7_25  + bio12_25 + walk_liberia_mean + savanna + vap + 
+                                            pop_dens + population,
+                                                listw=col.w,
+                                                data = .)))) %>% unnest(residuals)
+
+dftest %>% 
+  group_by(disease) %>%
+  bind_cols(resid) %>%
+  ggplot() + 
+  geom_sf(aes(fill=x)) + 
+  facet_grid(~disease...11) + 
+  theme_void() + 
+  scale_fill_viridis_c(option="B", direction=-1)
+```
+
+## References
+
+    <div id="refs"></div>
+
+## Appendix
+
+### BU
+
+```{=html}
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+</style>
+```
+| **Authors**                   | **Country**                      | **Year of survey** | **Location**                                | **Study design**                                                                                                    | **Case ascertainment**                                                                      | **Active cases** | **Sample size** | **Prevalence per 10 000 population (95% CI)** | **Quality score** |
+|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+| Johnson et al (2005)34        | Benin                            | 2004               | Lalo commune                                | Exhaustive preparatory phase followed by validation of suspected cases                                              | Clinical diagnosis following WHO guidelines                                                 | 160              | 86 819          | 18·4 (15·7--21·5)                             | 4                 |
+| Sopoh et al (2010)29          | Benin                            | 2006               | Zè district                                 | Exhaustive preparatory phase followed by validation of suspected cases                                              | Clinical diagnosis following WHO guidelines                                                 | 222              | 82 450          | 26·9 (23·5--30·7)                             | 4                 |
+| Noeske et al (2004)7          | Cameroon                         | 2001               | Ayos and Akonolinga health districts        | Exhaustive survey in convenience sample of communities with suspect cases                                           | Clinical diagnosis, a subset confirmed by PCR or Ziehl-Neelsen staining                     | 202              | 98 500          | 20·5 (17·8--23·5)                             | 2                 |
+| Porten et al (2009)8          | Cameroon                         | 2007               | Akonolinga district                         | Exhaustive survey in a random selection of communities                                                              | Clinical diagnosis following WHO guidelines, active and total cases reported separately     | 56               | 26 679          | 21·0 (15·9--27·3)                             | 5                 |
+| Bratschi et al (2013)35       | Cameroon                         | 2010               | Bankim Health District                      | Exhaustive survey of health district                                                                                | Clinical diagnosis, a subset confirmed by PCR                                               | 25               | 48 962          | 5·1 (3·3--7·5)                                | 3                 |
+| Kanga (2001)36                | Côte d'Ivoire                    | 1995               | Côte d'Ivoire                               | Exhaustive survey of entire country                                                                                 | Suspect cases identified by community health workers, confirmed by clinicians               | 4642             | 14 500 000      | 3·2 (3·1--3·3)                                | 2                 |
+| Ecra et al (2005)30           | Côte d'Ivoire                    | 1998               | Zoukoougbeu sub-prefecture                  | Exhaustive survey of entire sub-prefecture                                                                          | Nodules detected clinically, Mycobacterium ulcerans confirmed by histopathological analysis | 54               | 47 742          | 11·3\* (8·5--14·8)                            | 3                 |
+| Mavinga Phanzu et al (2013)31 | Democratic Republic of the Congo | 2008               | Kimpese and Nsona-Mpangu Rural Health Zones | Exhaustive preparatory phase followed by validation of suspected cases                                              | Clinical diagnosis following WHO guidelines, a subset confirmed by PCR                      | 259              | 237 418         | 10·9 (9·6--12·3)                              | 6                 |
+| Amofah et al (1993)32         | Ghana                            | 1991               | Amansie West district                       | Exhaustive survey of entire district                                                                                | Clinical diagnosis, a subset confirmed by Ziehl-Neelsen staining                            | 90               | 130 000         | 6·9 (5·6--8·5)                                | 4                 |
+| Ampah et al (2016)33          | Ghana                            | 2013               | Ofin River valley                           | Exhaustive survey in random sample (n=10) and convenience sample (n=3) of communities within 5 km of the Ofin River | Clinical diagnosis in following WHO guidelines, a subset confirmed by PCR                   | 7                | 20 390          | 3·4 (1·4--7·1)                                | 6                 |
+
+### LF
+
+```{r lf}
+
+
+lf_raster<-raster("data/lf/lf2018.tif")
+
+lf_raster<- raster::crop(lf_raster, map)
+
+dftest_lf<-dftest %>%filter (disease=="LF")
+
+map0 <- read_sf("data/map0/lbr_admbnda_adm0_ocha_20191104.shp")
+
+lf_raster_mean_co <- raster::extract(lf_raster, map0, 
+                             weights=TRUE, 
+                             fun=mean, na.rm=T) # 11.1%
+
+
+lf_raster_mean <- raster::extract(lf_raster, dftest_lf, 
+                             weights=TRUE, 
+                             fun=mean, na.rm=T)
+
+dftest_lf <- dftest_lf %>% cbind(lf_raster_mean)
+
+tablf<-dftest_lf %>% st_drop_geometry() %>% 
+  dplyr::select(County,District,lf_raster_mean) %>%
+  mutate(lf_raster_mean=round(lf_raster_mean,2)) %>%
+  arrange (-lf_raster_mean)
+
+knitr::kable(tablf, caption = "Estimated Prevalence of LF (%), as measured by the ICT antigen test by Cromwell et al. (2020)")
+```
+
+### Population
+
+```{r mappop, fig.cap="Estimated population in 2021"}
+
+ggplot() + 
+  geom_sf(data=map, fill=NA) + 
+  geom_sf(data =map, aes(fill=population)) + 
+  theme_void() + 
+  scale_fill_viridis_c(direction = -1,option="D",
+                       labels = comma, trans="log10") +
+  geom_sf(data=hf,aes(shape=amenity), alpha = .5, size=1.5, fill="gray",
+          colour="darkgray") + 
+  annotation_scale()
+
+```
+
+### District population and health facilities
+
+```{r}
+
+ggplot() + 
+  geom_sf(data=map, fill=NA) + 
+  geom_sf(data =map, aes(fill=population)) + 
+  theme_void() + 
+  scale_fill_viridis_c(direction = -1, trans = "log10",
+                       labels = comma) +
+  geom_sf(data=hf,aes(shape=amenity), alpha = .3, size=1) + 
+  annotation_scale()
+
+```
+
+### District population density
+
+```{r}
+
+map %>% mutate(pop_dens=as.numeric(pop_dens)) %>%
+ggplot() + 
+  geom_sf(aes(fill=pop_dens)) + 
+  theme_void() + 
+  scale_fill_viridis_c(direction = -1, trans = "log10",
+                       labels = comma) + 
+  annotation_scale()
+
+```
+
+### Land distribution
+
+```{r land}
+
+f<-c("Forest","Degraded forest", "Agriculture","Savanna","Thicket",
+    "Gallery forest and riparian forest","Plantation", "Herbaceous savanna")
+
+land_liberia<-readRDS("data/land_liberia.rds")
+
+land_liberia  %>%
+  ggplot() + 
+  geom_sf(aes(colour=Label,
+              fill=Label)) + gghighlight(Label %in% f) + 
+  theme_void() + 
+  theme(legend.position = "bottom")
+
+
+```
+
+### Rivers
+
+```{r}
+
+rivers <- read_sf(dsn = "data/rivers/tsr_liberia_rivers_1_to_200k_v1.3.shp")
+
+rivers <- st_transform(rivers, st_crs(map)) 
+
+ggplot() + geom_sf(data=map,fill = NA) +
+  geom_sf(data=rivers,fill=NA, colour="darkblue") + theme_void()
+
+```
+
+### Bioclimate variables
+
+```{r}
+
+bio<-c("bio1_25","bio2_25","bio3_25","bio7_25","bio12_25", "vap")
+
+labels<-c(
+  "bio1_25" = "Annual Mean Temperature",
+"bio2_25" = "Mean Diurnal Temperature Range",
+"bio3_25" = "Isothermality (×100)",
+"bio7_25" = "Temperature Annual Range",
+"bio12_25" = "Annual Precipitation",
+"vap" ="Annual Mean Evapotranspiration")
+
+ map_final %>% dplyr::select(c(bio)) %>%
+   pivot_longer(bio, names_to = "variable") %>%
+  ggplot()+
+  geom_sf(aes(fill = value)) +
+  facet_wrap(~variable, 
+            labeller = labeller(variable = labels)) +
+  theme_void() + 
+  geom_sf(data=map,colour="white", fill=NA) +
+  scale_fill_viridis_c()
+
+
+```
+
+<!--chapter:end:index.Rmd-->
+
