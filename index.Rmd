@@ -8,7 +8,7 @@ output:
     toolbar:
       position: fixed
     edit : null
-    download: ["pdf.pdf", "PDF"]
+    download: ["index.pdf", "PDF"]
     search:
       # options to control/tune search engine behavior (for
       engine: lunr # or fuse
@@ -57,6 +57,12 @@ hf <- hf %>% filter (amenity != "pharmacy") %>% filter (amenity != "dentist")
 
 care<-c("Bomi", "Bong", "Lofa", "Maryland", "Nimba")
 
+
+```
+
+```{r, cache=TRUE}
+
+land_liberia<-readRDS("data/land_liberia.rds")
 
 ```
 
@@ -331,11 +337,11 @@ I start using a multiple linear regression to analyse the potential spatial corr
 
 I start by incrementally testing the association between the number of cases and IC/nIC districts, adjusted by the estimated population in 2021, population density in 2021, the proportion of the district covered by savanna and agricultural land (due to relation to irrigation) [@Röltgen2019], and relevant bioclimatic variables [@Simpson2021] such as "Annual Mean Temperature", "Mean Diurnal Range (Mean of monthly (max temp - min temp))","Isothermality","Temperature Annual Range", "Annual Mean Evapotranspiration" , and "Annual Precipitation".
 
-Bioclimatic data has been collected from the most recent (2021) spatial grid models [@Cerasoli2022; @Harris2020], raster data computing walking distance to health facilities [@weiss2020], land use the U.S. Geological survey from 2013[@cushing2016] and hexagons with population counts at 400m resolution based on the Global Human Settlement Layer (GHSL), OpenStreetMaps and overlaid with Facebook population data where available on year 2022 from [kontur](https://data.humdata.org/dataset/kontur-population-dataset).
+Bioclimatic data has been collected from the most recent (2021) spatial grid models [@Cerasoli2022; @Harris2020], raster data computing walking distance to health facilities [@weiss2020], land use the U.S. Geological survey from 2013[@cushing2016] and hexagons with population counts at 400m resolution based on the Global Human Settlement Layer (GHSL), OpenStreetMaps and overlaid with Facebook population data where available on year 2022 from [Kontur](https://data.humdata.org/dataset/kontur-population-dataset).
 
-Karsor/Laura: ***Do these variables make sense? Others?***
+***Karsor/Laura:*** ***Do these variables make sense? Others?***
 
-$Number/Ratio_{Cases} = \alpha + \beta_{1}*\text{IC} + \beta_{2}*\text{Population} + \beta_{3}*\text{Population-density} + \beta_{4}*\text{Proportion-Savanna land}+\beta_{5}*\text{Proportion-Agriculture land}+\beta_{6}*\text{Distance-walking-hf}+\beta_{7-12}*\text{Bioclimatic-variables}+\epsilon$
+$$Number/Ratio_{Cases} = \alpha + \beta_{1}*\text{IC} + \beta_{2}*\text{Population} + \beta_{3}*\text{Population-density} + \\  \beta_{4}*\text{Proportion-Savanna land}+\beta_{5}*\text{Proportion-Agriculture land} + \\ \beta_{6}*\text{Distance-walking-hf} + \beta_{7-12}*\text{Bioclimatic-variables} + \epsilon$$
 
 Residuals suggest
 
@@ -504,12 +510,10 @@ ggplot() +
 
 ### Land distribution
 
-```{r land}
+```{r land, cache=TRUE}
 
 f<-c("Forest","Degraded forest", "Agriculture","Savanna","Thicket",
     "Gallery forest and riparian forest","Plantation", "Herbaceous savanna")
-
-land_liberia<-readRDS("data/land_liberia.rds")
 
 land_liberia  %>%
   ggplot() + 

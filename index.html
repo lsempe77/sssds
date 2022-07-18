@@ -283,9 +283,9 @@ Figure 9: Ratio 2019-2021 by Integrated case management
 <p>In this section, I present inferential analysis to assess if case management and environmental factors found in the literature are associated to the number of detected cases and the ratio of cases per 10,000.</p>
 <p>I start using a multiple linear regression to analyse the potential spatial correlation.</p>
 <p>I start by incrementally testing the association between the number of cases and IC/nIC districts, adjusted by the estimated population in 2021, population density in 2021, the proportion of the district covered by savanna and agricultural land (due to relation to irrigation) <span class="citation">(Röltgen and Pluschke 2019)</span>, and relevant bioclimatic variables <span class="citation">(Simpson et al. 2021)</span> such as “Annual Mean Temperature”, “Mean Diurnal Range (Mean of monthly (max temp - min temp))”,“Isothermality”,“Temperature Annual Range”, “Annual Mean Evapotranspiration” , and “Annual Precipitation”.</p>
-<p>Bioclimatic data has been collected from the most recent (2021) spatial grid models <span class="citation">(Cerasoli, D’Alessandro, and Biondi 2022; Harris et al. 2020)</span>, raster data computing walking distance to health facilities <span class="citation">(Weiss et al. 2020)</span>, land use the U.S. Geological survey from 2013<span class="citation">(Cushing et al. 2016)</span> and hexagons with population counts at 400m resolution based on the Global Human Settlement Layer (GHSL), OpenStreetMaps and overlaid with Facebook population data where available on year 2022 from <a href="https://data.humdata.org/dataset/kontur-population-dataset">kontur</a>.</p>
-<p>Karsor/Laura: <strong><em>Do these variables make sense? Others?</em></strong></p>
-<p><span class="math inline">\(Number/Ratio_{Cases} = \alpha + \beta_{1}*\text{IC} + \beta_{2}*\text{Population} + \beta_{3}*\text{Population-density} + \beta_{4}*\text{Proportion-Savanna land}+\beta_{5}*\text{Proportion-Agriculture land}+\beta_{6}*\text{Distance-walking-hf}+\beta_{7-12}*\text{Bioclimatic-variables}+\epsilon\)</span></p>
+<p>Bioclimatic data has been collected from the most recent (2021) spatial grid models <span class="citation">(Cerasoli, D’Alessandro, and Biondi 2022; Harris et al. 2020)</span>, raster data computing walking distance to health facilities <span class="citation">(Weiss et al. 2020)</span>, land use the U.S. Geological survey from 2013<span class="citation">(Cushing et al. 2016)</span> and hexagons with population counts at 400m resolution based on the Global Human Settlement Layer (GHSL), OpenStreetMaps and overlaid with Facebook population data where available on year 2022 from <a href="https://data.humdata.org/dataset/kontur-population-dataset">Kontur</a>.</p>
+<p><strong><em>Karsor/Laura:</em></strong> <strong><em>Do these variables make sense? Others?</em></strong></p>
+<p><span class="math display">\[Number/Ratio_{Cases} = \alpha + \beta_{1}*\text{IC} + \beta_{2}*\text{Population} + \beta_{3}*\text{Population-density} + \\  \beta_{4}*\text{Proportion-Savanna land}+\beta_{5}*\text{Proportion-Agriculture land} + \\ \beta_{6}*\text{Distance-walking-hf} + \beta_{7-12}*\text{Bioclimatic-variables} + \epsilon\]</span></p>
 <p>Residuals suggest</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:residuals"></span>
 <img src="index_files/figure-html/residuals-1.png" alt="Residuals OLS regression on number of cases" width="1152" />
@@ -1182,11 +1182,11 @@ Figure 13: Estimated population in 2021
 </div>
 <div id="district-population-and-health-facilities" class="section level3 hasAnchor" number="0.5.4">
 <h3><span class="header-section-number">0.5.4</span> District population and health facilities<a href="#district-population-and-health-facilities" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" width="1152" style="display: block; margin: auto;" /></p>
 </div>
 <div id="district-population-density" class="section level3 hasAnchor" number="0.5.5">
 <h3><span class="header-section-number">0.5.5</span> District population density<a href="#district-population-density" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="1152" style="display: block; margin: auto;" /></p>
 </div>
 <div id="land-distribution" class="section level3 hasAnchor" number="0.5.6">
 <h3><span class="header-section-number">0.5.6</span> Land distribution<a href="#land-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -1194,11 +1194,11 @@ Figure 13: Estimated population in 2021
 </div>
 <div id="rivers" class="section level3 hasAnchor" number="0.5.7">
 <h3><span class="header-section-number">0.5.7</span> Rivers<a href="#rivers" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="1152" style="display: block; margin: auto;" /></p>
 </div>
 <div id="bioclimate-variables" class="section level3 hasAnchor" number="0.5.8">
 <h3><span class="header-section-number">0.5.8</span> Bioclimate variables<a href="#bioclimate-variables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div class="csl-entry">
 Cerasoli, Francesco, Paola D’Alessandro, and Maurizio Biondi. 2022. <span>“Worldclim 2.1 Versus Worldclim 1.4: Climatic Niche and Grid Resolution Affect Between<span>-</span>Version Mismatches in Habitat Suitability Models Predictions Across Europe.”</span> <em>Ecology and Evolution</em> 12 (2). <a href="https://doi.org/10.1002/ece3.8430">https://doi.org/10.1002/ece3.8430</a>.
