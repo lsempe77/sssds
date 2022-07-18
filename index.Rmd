@@ -3,8 +3,6 @@ title: "Spatial Analysis Severe Stigmatising Skin NTDs in Liberia"
 subtitle: "Years 2019-2021"
 author: "Lucas Sempé"
 output:
-  bookdown::pdf_book:
-    latex_engine: lualatex
   bookdown::gitbook:
     config:
     toolbar:
@@ -28,6 +26,8 @@ output:
       whatsapp: false
       all: ['facebook', 'twitter', 'linkedin', 'github', 'whatsapp']
     info: true
+  bookdown::pdf_book:
+    latex_engine: lualatex
 editor_options: 
   chunk_output_type: console
 bibliography: references.bib
@@ -43,8 +43,8 @@ library(ggspatial)
 library(raster)
 library(janitor)
 
-knitr::opts_chunk$set(echo = F,warning = F,message = F,
-  comment = '', fig.width = 6, fig.height = 6
+knitr::opts_chunk$set(echo = F,warning = F,message = F,fig.align = 'center',
+  comment = '', fig.width = 12, fig.height = 8
 )
 
 map_final <- readRDS("data/map_final.rds")
@@ -82,7 +82,7 @@ cases.y %>%
 
 ```
 
-Figure \@ref(fig:cases-year) portrays the number of detected cases across years 2019 to 2021 for the 5 diseases. It is possible to observe geographical patterns for BU (with the majority of cases found in the North and East of the country) and Leprosy (with cases found in the middle and center-south of the country). For the other diseases,
+Figure \@ref(fig:cases-year) portrays the number of detected cases across years 2019 to 2021 for the 5 diseases. It is possible to observe geographical patterns for BU (with the majority of cases found in the North and East of the country) and Leprosy (with cases found in the middle and center-south of the country). In the case of HC and LF, they do not follow the same geographical pattern as we could expect due to the same origin for both diseases. Finally, we observe few districts with case detection of Yaws, mostly in the south and center of the country.
 
 ```{r cases-year, fig.cap = 'Cases per disease and year over time'}
 
