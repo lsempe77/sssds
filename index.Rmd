@@ -1,6 +1,6 @@
 ---
-title: "Spatial Analysis Severe Stigmatising Skin NTDs in Liberia"
-subtitle: "Years 2019-2021"
+title: "Spatial Analysis Severe Stigmatising Skin NTDs in Liberia - Years 2019-2021"
+subtitle: "Working draft"
 author: "Lucas Sempé"
 output:
   bookdown::gitbook:
