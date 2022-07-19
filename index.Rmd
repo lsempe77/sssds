@@ -394,9 +394,6 @@ ehs %>% filter(str_detect(classification,"hot")) %>%
 
 Coefficients and analysis from Spatial regressions
 
-## References
-
-    <div id="refs"></div>
 
 ## Appendix
 
@@ -546,15 +543,38 @@ labels<-c(
 "bio12_25" = "Annual Precipitation",
 "vap" ="Annual Mean Evapotranspiration")
 
- map_final %>% dplyr::select(c(bio)) %>%
-   pivot_longer(bio, names_to = "variable") %>%
-  ggplot()+
-  geom_sf(aes(fill = value)) +
-  facet_wrap(~variable, 
+ map_final %>% 
+      pivot_longer(all_of(bio), names_to = "variable", values_to = "values") %>%
+  group_split(variable) %>% 
+  map(~ggplot(.,aes(fill = values)) + 
+       geom_sf() +
+      scale_fill_gradient2(
+        low = "#3366CC", 
+        mid = "white", 
+        high = "#FF3300", 
+        midpoint = median(.$values)
+      )+
+     facet_wrap(~variable, 
             labeller = labeller(variable = labels)) +
+  theme_void() +
+    theme(legend.position = "bottom")) %>% 
+  cowplot::plot_grid(plotlist = ., align = 'hv', ncol = 2)
+
+```
+
+### Mean walking distance to health centre
+
+```{r}
+
+
+ map_final %>% 
+  ggplot()+
+  geom_sf(aes(fill = walk_liberia_mean)) +
   theme_void() + 
-  geom_sf(data=map,colour="white", fill=NA) +
-  scale_fill_viridis_c()
+  scale_fill_viridis_c(name = "Mean distance walking (minutes)") + 
+  theme (legend.position = "bottom")
 
 
 ```
+
+## References
