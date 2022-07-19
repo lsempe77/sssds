@@ -12,10 +12,6 @@ output:
     search:
       engine: lunr # or fuse
       options: null
-    fontsettings:
-      theme: white
-      family: sans
-      size: 2
     sharing:
       facebook: true
       github: true
