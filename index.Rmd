@@ -10,7 +10,6 @@ output:
     edit : null
     download: ["index.pdf", "PDF"]
     search:
-      # options to control/tune search engine behavior (for
       engine: lunr # or fuse
       # fuse.js, refer to https://fusejs.io/api/options.html)
       options: null
