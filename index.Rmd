@@ -11,7 +11,6 @@ output:
     download: ["index.pdf", "PDF"]
     search:
       engine: lunr # or fuse
-      # fuse.js, refer to https://fusejs.io/api/options.html)
       options: null
     fontsettings:
       theme: white
@@ -43,7 +42,7 @@ library(raster)
 library(janitor)
 
 knitr::opts_chunk$set(echo = F,warning = F,message = F,fig.align = 'center',
-  comment = '', fig.width = 12, fig.height = 8
+  comment = '', fig.width = 8, fig.height = 6
 )
 
 map_final <- readRDS("data/map_final.rds")
